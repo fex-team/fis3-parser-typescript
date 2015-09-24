@@ -12,14 +12,14 @@ npm install -g fis-parser-typescript
 ### USEAGE
 
 	
-	```js
-	fis.match('/es6/**.ts', {
-		parser: fis.plugin('typescript', {
-				// options
-			}),
-		rExt: '.js'
-	});
-	```
+```js
+fis.match('/es6/**.ts', {
+	parser: fis.plugin('typescript', {
+			// options
+		}),
+	rExt: '.js'
+});
+```
 	
 ### 注意
 
