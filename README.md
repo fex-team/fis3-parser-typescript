@@ -13,7 +13,7 @@ npm install -g fis-parser-typescript
 
 	
 ```js
-fis.match('/es6/**.ts', {
+fis.match('**.ts', {
 	parser: fis.plugin('typescript', {
 			// options
 		}),
