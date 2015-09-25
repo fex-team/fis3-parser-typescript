@@ -1,12 +1,12 @@
-## fis-parser-typescript
+## fis3-parser-typescript
 
-typescript parser for fis
+typescript parser for fis3
 
 
 ### INSTALL
 
 ```bash
-npm install -g fis-parser-typescript
+npm install -g fis3-parser-typescript
 ```
 
 ### USEAGE

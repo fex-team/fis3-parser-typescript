@@ -1,6 +1,6 @@
 {
-  "name": "fis-parser-typescript",
-  "description": "A parser plugin for fis to compile typescript(ts) file.",
+  "name": "fis3-parser-typescript",
+  "description": "A parser plugin for fis3 to compile typescript(ts) file.",
   "version": "0.1.0",
   "author": "FIS Team <fis@baidu.com>",
   "homepage": "http://fis.baidu.com/",
@@ -11,7 +11,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fex-team/fis-parser-typescript.git"
+    "url": "https://github.com/fex-team/fis3-parser-typescript.git"
   },
   "engines": {
     "node": ">=0.8.0"
