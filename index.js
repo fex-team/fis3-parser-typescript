@@ -8,6 +8,10 @@ var util = require('util');
 module.exports = function (content, file, opts) {
   var conf = fis.util.clone(opts);
 
+  if (!conf.sourceMap) {
+    conf.inlineSources = false;
+  }
+
   var result = ts.transpileModule(content, {
     compilerOptions: conf,
     fileName: file.realpath,
