@@ -1,7 +1,7 @@
 {
   "name": "fis3-parser-typescript",
   "description": "A parser plugin for fis3 to compile typescript(ts) file.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "FIS Team <fis@baidu.com>",
   "homepage": "http://fis.baidu.com/",
   "keywords": [
