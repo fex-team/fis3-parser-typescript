@@ -143,5 +143,6 @@ module.exports.defaultOptions = {
   rootDir: fis.project.getProjectPath(),
   sourceMap: false,
   inlineSources: true,
-  emitDecoratorMetadata: true
+  emitDecoratorMetadata: true,
+  experimentalDecorators: true
 };
