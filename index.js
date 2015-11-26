@@ -97,7 +97,24 @@ module.exports = function (content, file, opts) {
   }, file);
   
   result.diagnostics.forEach(function(e) {
-    var msg = util.format('Syntax Error: %s in `%s`', e.messageText, file.subpath);
+    var pos = e.start;
+    var line = 0, column = 0;
+    var lineMap = e.file.lineMap;
+
+    lineMap.every(function(p, i) {
+      if (pos < p) {
+        line = i;
+        return false;
+      }
+      return true;
+    });
+
+    if (line && pos) {
+      column = pos - lineMap[line-1];
+    }
+    
+
+    var msg = util.format('Syntax Error: %s in `%s`[%s:%s]', e.messageText, file.subpath, line, column);
     fis.log.warning(msg);
   });
 
