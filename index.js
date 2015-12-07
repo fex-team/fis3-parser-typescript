@@ -5,6 +5,10 @@
 var ts = require('typescript');
 var util = require('util');
 
+var ModuleKind = ts.ModuleKind;
+var JsxEmit = ts.JsxEmit;
+var ScriptTarget = ts.ScriptTarget;
+
 function transpileModule(content, transpileOptions, file) {
   var options = transpileOptions.compilerOptions;
 
@@ -141,20 +145,20 @@ module.exports = function (content, file, opts) {
 };
 
 module.exports.defaultOptions = {
-  // 1: preserve
-  // 2: React
-  jsx: 2,
+  // 1: JsxEmit.Preserve
+  // 2: JsxEmit.React
+  jsx: JsxEmit.React,
   
-  // 1: commonjs
-  // 2: amd
-  // 3: umd
-  // 4: system
-  module: 1,
+  // 1: ModuleKind.CommonJS
+  // 2: ModuleKind.AMD
+  // 3: ModuleKind.UMD
+  // 4: ModuleKind.System
+  module: ModuleKind.CommonJS,
 
-  // 0: ES3
-  // 1: ES5
-  // 2: ES6
-  target: 1,
+  // 0: ScriptTarget.ES3
+  // 1: ScriptTarget.ES5
+  // 2: ScriptTarget.ES6
+  target: ScriptTarget.ES5,
   noImplicitAny: false,
   outDir: "built",
   rootDir: fis.project.getProjectPath(),
