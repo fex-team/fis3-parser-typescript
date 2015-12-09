@@ -87,6 +87,15 @@ function transpileModule(content, transpileOptions, file) {
 }
  
 module.exports = function (content, file, opts) {
+  
+  // 用 html 语言处理一遍。
+  if (fis.compile.partial && file.ext === '.tsx') {
+    content = fis.compile.partial(content, file, {
+      ext: '.html',
+      isHtmlLike: true
+    });
+  }
+
   var conf = fis.util.clone(opts);
 
   if (!conf.sourceMap) {
