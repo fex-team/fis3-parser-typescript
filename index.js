@@ -18,7 +18,7 @@ function transpileModule(content, transpileOptions, file) {
   options.noResolve = true;
 
   var newLine = ts.getNewLineCharacter(options);
-  var inputFileName = file.realpath;
+  var inputFileName = file.realpath.replace(/\.jsx$/, '.tsx');
   var sourceFile = ts.createSourceFile(inputFileName, content, options.target);
   var sourceMapText, outputText;
   
@@ -36,7 +36,7 @@ function transpileModule(content, transpileOptions, file) {
       
       if (info.file) {
         var f = info.file;
-        var sf = ts.createSourceFile(f.realpath, f.getContent(), options.target);
+        var sf = ts.createSourceFile(f.realpath.replace(/\.jsx$/, '.tsx'), f.getContent(), options.target);
         
         if (f.isMod) {
           sf.moduleName = f.moduleId || f.id;
@@ -89,7 +89,7 @@ function transpileModule(content, transpileOptions, file) {
 module.exports = function (content, file, opts) {
   
   // 用 html 语言处理一遍。
-  if (fis.compile.partial && file.ext === '.tsx') {
+  if (fis.compile.partial && file.ext === '.tsx' || file.ext === '.jsx') {
     content = fis.compile.partial(content, file, {
       ext: '.html',
       isHtmlLike: true
