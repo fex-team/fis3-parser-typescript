@@ -21,7 +21,7 @@ function transpileModule(content, transpileOptions, file) {
   var inputFileName = file.isJsXLike ? file.realpath.replace(/\.[^\.]+$/, '.tsx') : file.realpath.replace(/\.jsx$/, '.tsx');
   var sourceFile = ts.createSourceFile(inputFileName, content, options.target);
   var sourceMapText, outputText;
-  
+
   if (file.isMod) {
     sourceFile.moduleName = file.moduleId || file.id;
   }
@@ -33,19 +33,19 @@ function transpileModule(content, transpileOptions, file) {
       }
 
       var info = fis.uri(fileName, file.dirname);
-      
+
       if (info.file) {
         var f = info.file;
         var sf = ts.createSourceFile(f.isJsXLike ? f.realpath.replace(/\.[^\.]+$/, '.tsx') : f.realpath.replace(/\.jsx$/, '.tsx'), f.getContent(), options.target);
-        
+
         if (f.isMod) {
           sf.moduleName = f.moduleId || f.id;
         }
-        
+
         return sf;
       }
 
-      return undefined; 
+      return undefined;
     },
     writeFile: function (name, text, writeByteOrderMark) {
       if (ts.fileExtensionIs(name, ".map")) {
@@ -67,27 +67,27 @@ function transpileModule(content, transpileOptions, file) {
     },
     readFile: function (fileName) { return ""; }
   };
-  
+
   var program = ts.createProgram([inputFileName], options, compilerHost);
   var diagnostics;
-  
+
   if (transpileOptions.reportDiagnostics) {
       diagnostics = [];
       ts.addRange(diagnostics, program.getSyntacticDiagnostics(sourceFile));
       ts.addRange(diagnostics, program.getOptionsDiagnostics());
   }
-  
+
   program.emit();
 
   return {
-    outputText: outputText, 
-    diagnostics: diagnostics, 
-    sourceMapText: sourceMapText 
+    outputText: outputText,
+    diagnostics: diagnostics,
+    sourceMapText: sourceMapText
   };
 }
- 
+
 module.exports = function (content, file, opts) {
-  
+
   // 用 html 语言处理一遍。
   if (fis.compile.partial && file.ext === '.tsx' || file.ext === '.jsx' || file.isJsXLike) {
     content = fis.compile.partial(content, file, {
@@ -108,7 +108,7 @@ module.exports = function (content, file, opts) {
     reportDiagnostics: true,
     moduleName: undefined
   }, file);
-  
+
   result.diagnostics.forEach(function(e) {
     var pos = e.start;
     var line = 0, column = 0;
@@ -125,10 +125,10 @@ module.exports = function (content, file, opts) {
     if (line && pos) {
       column = pos - lineMap[line-1];
     }
-    
+
 
     var msg = util.format('Syntax Error: %s in `%s`[%s:%s]', e.messageText, file.subpath, line, column);
-    fis.log.warning(msg);
+    throw new Error(msg);
   });
 
   if (result.sourceMapText) {
@@ -141,7 +141,7 @@ module.exports = function (content, file, opts) {
 
     mapping.setContent(result.sourceMapText);
     var url = mapping.getUrl(fis.compile.settings.hash, fis.compile.settings.domain);
-    
+
     result.outputText = result.outputText.replace(/\n?\s*\/\/#\ssourceMappingURL=.*?(?:\n|$)/g, '');
     result.outputText += '\n//# sourceMappingURL=' +  url + '\n';
 
@@ -149,7 +149,7 @@ module.exports = function (content, file, opts) {
     file.extras.derived = file.extras.derived || [];
     file.extras.derived.push(mapping);
   }
-  
+
   return result.outputText || '';
 };
 
@@ -157,7 +157,7 @@ module.exports.defaultOptions = {
   // 1: JsxEmit.Preserve
   // 2: JsxEmit.React
   jsx: JsxEmit.React,
-  
+
   // 1: ModuleKind.CommonJS
   // 2: ModuleKind.AMD
   // 3: ModuleKind.UMD
