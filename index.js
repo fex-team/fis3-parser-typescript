@@ -75,6 +75,8 @@ function transpileModule(content, transpileOptions, file) {
       diagnostics = [];
       ts.addRange(diagnostics, program.getSyntacticDiagnostics(sourceFile));
       ts.addRange(diagnostics, program.getOptionsDiagnostics());
+      // ts.addRange(diagnostics, program.getGlobalDiagnostics());
+      ts.addRange(diagnostics, program.getSemanticDiagnostics(sourceFile));
   }
 
   program.emit();
@@ -110,24 +112,12 @@ module.exports = function (content, file, opts) {
   }, file);
 
   result.diagnostics.forEach(function(e) {
-    var pos = e.start;
-    var line = 0, column = 0;
-    var lineMap = e.file.lineMap;
-
-    lineMap.every(function(p, i) {
-      if (pos < p) {
-        line = i;
-        return false;
-      }
-      return true;
-    });
-
-    if (line && pos) {
-      column = pos - lineMap[line-1];
+    if(!e.file || e.code === 1208){
+        return;
     }
-
-
-    var msg = util.format('Syntax Error: %s in `%s`[%s:%s]', e.messageText, file.subpath, line, column);
+    let { line, character } = e.file.getLineAndCharacterOfPosition(e.start);
+    let message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
+    var msg = util.format('Syntax Error: %s in `%s` [%s:%s]', message, file.path, line+1, character+1);
     throw new Error(msg);
   });
 
