@@ -70,13 +70,15 @@ function transpileModule(content, transpileOptions, file) {
 
   var program = ts.createProgram([inputFileName], options, compilerHost);
   var diagnostics;
+  var noticeDiagnostics;
 
   if (transpileOptions.reportDiagnostics) {
       diagnostics = [];
       ts.addRange(diagnostics, program.getSyntacticDiagnostics(sourceFile));
       ts.addRange(diagnostics, program.getOptionsDiagnostics());
-      // ts.addRange(diagnostics, program.getGlobalDiagnostics());
-      ts.addRange(diagnostics, program.getSemanticDiagnostics(sourceFile));
+
+      noticeDiagnostics = [];
+      ts.addRange(noticeDiagnostics, program.getSemanticDiagnostics(sourceFile));
   }
 
   program.emit();
@@ -84,6 +86,7 @@ function transpileModule(content, transpileOptions, file) {
   return {
     outputText: outputText,
     diagnostics: diagnostics,
+    noticeDiagnostics: noticeDiagnostics,
     sourceMapText: sourceMapText
   };
 }
@@ -112,13 +115,22 @@ module.exports = function (content, file, opts) {
   }, file);
 
   result.diagnostics.forEach(function(e) {
-    if(!e.file || e.code === 1208){
+    if(!e.file){
         return;
     }
     let { line, character } = e.file.getLineAndCharacterOfPosition(e.start);
     let message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
-    var msg = util.format('Syntax Error: %s in `%s` [%s:%s]', message, file.path, line+1, character+1);
+    var msg = util.format('Syntax Error: %s in [%s:%s]', message, line+1, character+1);
     throw new Error(msg);
+  });
+  result.noticeDiagnostics.forEach((e)=>{
+    if(!e.file){
+        return;
+    }
+    let { line, character } = e.file.getLineAndCharacterOfPosition(e.start);
+    let message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
+    var msg = util.format('Notice Syntax Error: %s in [%s:%s]', message, line+1, character+1);
+    console.log(msg);
   });
 
   if (result.sourceMapText) {
