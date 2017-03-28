@@ -78,7 +78,7 @@ function transpileModule(content, transpileOptions, file) {
       ts.addRange(diagnostics, program.getOptionsDiagnostics());
 
       noticeDiagnostics = [];
-      ts.addRange(noticeDiagnostics, program.getSemanticDiagnostics(sourceFile));
+      options.showNotices && ts.addRange(noticeDiagnostics, program.getSemanticDiagnostics(sourceFile));
   }
 
   program.emit();
@@ -134,7 +134,7 @@ module.exports = function (content, file, opts) {
     var character = lineAndCharacterObj.character;
     var message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
     var msg = util.format('Notice Syntax Error: %s in [%s:%s]', message, line+1, character+1);
-    console.log(msg);
+    fis.log.warn(msg);
   });
 
   if (result.sourceMapText) {
@@ -180,5 +180,6 @@ module.exports.defaultOptions = {
   sourceMap: false,
   inlineSources: true,
   emitDecoratorMetadata: true,
-  experimentalDecorators: true
+  experimentalDecorators: true,
+  showNotices: false
 };

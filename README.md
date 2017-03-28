@@ -33,6 +33,7 @@ fis.set('project.fileType.text', 'ts,tsx');
 ### 常用配置说明
 
 * `jsx` 默认为 2, 解析 `<xml>` 为对应的  `react` 语句。如果设置 1, 则保留。
+* `showNotices` 默认为 false, 如果要提示所有提示信息，请开启。
 * `module` 默认为 1.
 
 	* `1`: commonjs
