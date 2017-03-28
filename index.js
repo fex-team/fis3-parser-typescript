@@ -118,18 +118,22 @@ module.exports = function (content, file, opts) {
     if(!e.file){
         return;
     }
-    let { line, character } = e.file.getLineAndCharacterOfPosition(e.start);
-    let message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
+    var lineAndCharacterObj = e.file.getLineAndCharacterOfPosition(e.start);
+    var line = lineAndCharacterObj.line;
+    var character = lineAndCharacterObj.character;
+    var message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
     var msg = util.format('Syntax Error: %s in [%s:%s]', message, line+1, character+1);
     throw new Error(msg);
   });
-  result.noticeDiagnostics.forEach((e)=>{
+  result.noticeDiagnostics.forEach(function(e) {
     if(!e.file){
         return;
     }
-    let { line, character } = e.file.getLineAndCharacterOfPosition(e.start);
-    let message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
-    var msg = util.format('Syntax Error: %s in [%s:%s]', message, line+1, character+1);
+    var lineAndCharacterObj = e.file.getLineAndCharacterOfPosition(e.start);
+    var line = lineAndCharacterObj.line;
+    var character = lineAndCharacterObj.character;
+    var message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
+    var msg = util.format('Notice Syntax Error: %s in [%s:%s]', message, line+1, character+1);
     fis.log.warn(msg);
   });
 
