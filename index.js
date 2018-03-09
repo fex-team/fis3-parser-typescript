@@ -134,7 +134,7 @@ module.exports = function (content, file, opts) {
     var character = lineAndCharacterObj.character;
     var message = ts.flattenDiagnosticMessageText(e.messageText, '\n');
     var msg = util.format('Notice Syntax Error: %s in [%s:%s]', message, line+1, character+1);
-    fis.log.warn(msg);
+    fis.log[conf.noticeType] && fis.log[conf.noticeType](msg);
   });
 
   if (result.sourceMapText) {
@@ -181,5 +181,6 @@ module.exports.defaultOptions = {
   inlineSources: true,
   emitDecoratorMetadata: true,
   experimentalDecorators: true,
-  showNotices: false
+  showNotices: false,
+  noticeType: 'warn' // warn|error
 };
