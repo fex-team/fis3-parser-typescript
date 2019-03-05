@@ -12,7 +12,7 @@ npm install -g fis3-parser-typescript-gmsoft
 
 ```js
 fis.match("**.ts", {
-  parser: fis.plugin("typescript", {
+  parser: fis.plugin("typescript-gmsoft", {
     // options
   }),
   rExt: ".js"
